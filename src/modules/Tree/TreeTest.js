@@ -1,6 +1,5 @@
 import React from "react";
 import Tree from "./components/Tree";
-import "./TreeTest.css";
 
 export default class TreeTest extends React.PureComponent {
   constructor(props) {
