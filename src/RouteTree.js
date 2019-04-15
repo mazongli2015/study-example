@@ -30,6 +30,12 @@ const ruteConf = [
     name: "React.memo用法",
     url: "/react-memo",
     path: "modules/Memo/Memo.js"
+  }, {
+    id: 4,
+    pid: 0,
+    name: "优化Tree组件",
+    url: "/react-tree2",
+    path: "modules/TreeOptimize/TreeTest"
   }
 ];
 
@@ -52,8 +58,7 @@ const RouteTree = () => {
             render={nodeRender}
             treeNodes={ruteConf}
             onNodeClick={(e, node) => {
-              console.info("RouteTree-----", node);
-              setCurrentMenuItem(node);
+              !node.children && setCurrentMenuItem(node);
             }}
           />
         </div>

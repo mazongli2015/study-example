@@ -35,9 +35,9 @@ export const treeNode = ({ id, pid, name, ...extra }) => {
 
 /**
  *
- * @param {object[]} arr åå§èç¹æ°ç»
- * @returns {Object[]} æ¹é åçèç¹æ°ç»å¢å chilrenãparentIndex
- * åindexå±æ§æ°ç»çç¬¬ä¸ä¸ªåç´ ä¸ºæ ¹èç¹
+   * @param {object[]} arr 原始节点数组
+   * @returns {Object[]} 改造后的节点数组增加chilren、parentIndex
+   * 和index属性数组的第一个元素为根节点
  */
 export const arrayToTreeNodesArray = arr => {
   if (!Array.isArray(arr)) {
@@ -47,7 +47,7 @@ export const arrayToTreeNodesArray = arr => {
 
   const nodes = {};
 
-  // è½¬æ¢ææ®éObjectå½¢å¼, è®°å½index
+  // 转换成普通Object形式, 记录index
   arr.forEach((item, index) => {
     const nodeItem = treeNode(item);
     if (!nodeItem) return;
@@ -63,7 +63,7 @@ export const arrayToTreeNodesArray = arr => {
     const currentNode = arr[index];
     const { pid } = currentNode;
     if (`${pid}` === "-1" && (rootNodeIndex || rootNodeIndex === 0)) {
-      console.error("ä¸æ­¢ä¸ä¸ªæ ¹èç¹", {
+      console.error("不止一个根节点", {
         rootNodeIndexes: [rootNodeIndex, index]
       });
       return true;
@@ -94,14 +94,14 @@ export const arrayToTreeNodesArray = arr => {
     treeNodeArr[rootNodeIndex].hidden = false;
     return { treeNodeArr, rootNodeIndex };
   }
-  console.error("æ²¡ææ ¹èç¹");
+  console.error("没有根节点");
   return;
 };
 
 /**
  *
- * @param {object} treeObject å°å½¢å¦{id, name, pid, children}çobjectæ°æ®è½¬æ¢
- * ä¸ºæ å½¢ç»ææ°ç»
+ * @param {object} treeObject 将形如{id, name, pid, children}的object数据转换
+ * 为树形结构数组
  */
 export const objectToTreeNodesArray = treeObject => {
   const treeNodeArr = [];

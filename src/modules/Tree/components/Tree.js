@@ -20,35 +20,28 @@ const TreeNodes = props => {
 };
 
 const BranchNode = ({ branch, onNodeClick, treeNodes, level, render }) => {
-  // console.info("Tree.js---BranchNode--", { treeNodes, branch });
   const { children, hidden = false, expanded = false } = branch || {};
   if (hidden) return "";
-  if (!children || children.length === 0) {
-    return (
-      <LeafNode
-        treeNodes={treeNodes}
-        node={branch}
-        onNodeClick={onNodeClick}
-        render={render}
-        level={level}
-      />
-    );
-  }
+  const isLeafNode = !children || children.length === 0;
   const iconClass = expanded ? "icon-jiantou_xia" : "icon-jiantou_you";
   return (
-    <li className="tree-li">
+    <li className={`${isLeafNode ? "tree-leaf-node" : ""} tree-li`}>
       <span
         onClick={e => onNodeClick(e, branch)}
-        className={`branch-icon-text-container level${level}`}
+        className={` ${
+          isLeafNode ? "" : "branch-icon-text-container"
+        } level${level}`}
       >
-        <span className={`iconfont ${iconClass} branch-icon`} />
+        {!isLeafNode && (
+          <span className={`iconfont ${iconClass} branch-icon`} />
+        )}
         <span>
           {render && typeof render === "function"
             ? render({ node: branch, level, treeNodes })
             : branch.name}
         </span>
       </span>
-      {expanded && (
+      {expanded && !isLeafNode && (
         <ul className="tree-branch-node">
           {children.map(item => {
             const newBranch = treeNodes[item];
@@ -70,21 +63,6 @@ const BranchNode = ({ branch, onNodeClick, treeNodes, level, render }) => {
   );
 };
 
-const LeafNode = ({ node, onNodeClick, level, render, treeNodes }) => {
-  const { hidden = false } = node || {};
-  if (hidden) return "";
-
-  return (
-    <li className="tree-leaf-node tree-li">
-      <span onClick={e => onNodeClick(e, node)}>
-        {render && typeof render === "function"
-          ? render({ node, level, treeNodes })
-          : node.name}
-      </span>
-    </li>
-  );
-};
-
 const Tree = props => {
   const { treeNodes, onNodeClick, render } = props;
   // const nodesArrObj = createTreeNodesArray(treeNodes);
@@ -101,7 +79,7 @@ const Tree = props => {
     const nodesObject = createTreeNodesArray(treeNodes);
     setOriginNodes(treeNodes);
     setNodesArrObj(nodesObject);
-  });
+  }, [originNodes, treeNodes]);
   const { rootNodeIndex, treeNodeArr } = nodesArrObj || {};
 
   const nodeClickHandler = (e, node) => {
