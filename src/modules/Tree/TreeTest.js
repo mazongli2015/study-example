@@ -93,9 +93,9 @@ export default class TreeTest extends React.PureComponent {
   render() {
     return (
       <div id="tree">
-        <h3>数组格式的节点数据：</h3>
+        <h4>数组格式的节点数据：</h4>
         <Tree onNodeClick={this.onNodeClick} treeNodes={this.state.arrayData} />
-        <h3>Object格式的节点数据：</h3>
+        <h4>Object格式的节点数据：</h4>
         <Tree
           onNodeClick={this.onNodeClick}
           treeNodes={this.state.objectData}

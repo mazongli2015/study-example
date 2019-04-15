@@ -106,6 +106,7 @@ const Tree = props => {
 
   const nodeClickHandler = (e, node) => {
     e.stopPropagation();
+    // console.info("Tree.js---nodeClickHandler--", node);
     onNodeClick && onNodeClick(e, node);
     const newNodesArr = changeExpandStatus(node, treeNodeArr);
     // console.info("Tree.js---nodeClickHandler---", {

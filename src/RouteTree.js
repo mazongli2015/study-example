@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Link, Switch, BrowserRouter } from "react-router-dom";
 import loadable from "@loadable/component";
 import Tree from "./modules/Tree/components/Tree";
@@ -39,24 +39,31 @@ const nodeRender = ({ node, treeNodes, level }) => {
   return <Link to={node.url}>{node.name}</Link>;
 };
 
-const AsyncComponent = loadable(props => {
-  console.info("RouteTree---AsyncComponent----", props);
-  return import(`./${props.path}`);
-});
+const AsyncComponent = loadable(props => import(`./${props.path}`));
 
 // const i = 1;
 const RouteTree = () => {
+  const [currentMenuItem, setCurrentMenuItem] = useState({});
   return (
     <BrowserRouter>
       <div className="main">
         <div className="menu" id="tree">
-          <Tree render={nodeRender} treeNodes={ruteConf} />
+          <Tree
+            render={nodeRender}
+            treeNodes={ruteConf}
+            onNodeClick={(e, node) => {
+              console.info("RouteTree-----", node);
+              setCurrentMenuItem(node);
+            }}
+          />
         </div>
         <div className="view">
+          <h3 className="current-menu-item">
+            {(currentMenuItem || {}).name || ""}
+          </h3>
           <Switch>
             {ruteConf.map(item => {
               if (item.pid === -1) return "";
-              console.info("RouteTree-------", item.path);
               return (
                 <Route
                   key={`route-${item.id}`}
@@ -66,13 +73,6 @@ const RouteTree = () => {
                 />
               );
             })}
-
-            {/* <Route
-              key={`rotue-${ruteConf[i].id}`}
-              path={ruteConf[i].url}
-              exact
-              render={() => <AsyncComponent path={ruteConf[i].path} />}
-            /> */}
           </Switch>
         </div>
       </div>
