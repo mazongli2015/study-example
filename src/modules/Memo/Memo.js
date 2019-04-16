@@ -10,6 +10,7 @@ const areEqual = (prevProps, nextProps) => {
    **  等返回true,组件不发生重新渲染；反之，组件重新渲染。主要用于性能优化，不要过于依
    **  赖，容易发生bug
    **/
+  console.info("Memo----areEqual--", prevProps, nextProps);
   return prevProps.name === nextProps.name;
 };
 

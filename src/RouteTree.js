@@ -30,12 +30,20 @@ const ruteConf = [
     name: "React.memo用法",
     url: "/react-memo",
     path: "modules/Memo/Memo.js"
-  }, {
+  },
+  {
     id: 4,
     pid: 0,
     name: "优化Tree组件",
     url: "/react-tree2",
     path: "modules/TreeOptimize/TreeTest"
+  },
+  {
+    id: 5,
+    pid: 0,
+    name: "React.createContext",
+    url: "/react-context",
+    path: "modules/ReactContext/ContextTest"
   }
 ];
 

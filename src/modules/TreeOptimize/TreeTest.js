@@ -1,5 +1,6 @@
 import React from "react";
 import Tree from "./Tree";
+import createNodes from "./nodeCreator";
 
 export default class TreeTest extends React.PureComponent {
   constructor(props) {
@@ -84,6 +85,10 @@ export default class TreeTest extends React.PureComponent {
         }
       ]
     };
+
+    const arrayData = createNodes(10000, 2000, 1000);
+    console.info("TreeTest----constructor----", arrayData);
+    this.state.arrayData = arrayData;
   }
 
   onNodeClick = (e, node) => {

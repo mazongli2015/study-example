@@ -130,5 +130,8 @@ export const changeExpandStatus = (node, treeNodes) => {
   if (!children || children.length === 0) return;
   const nodes = [...treeNodes];
   nodes[node.index] = { ...node, expanded: !expanded };
+  children.forEach(item => {
+    nodes[item] = { ...nodes[item], rendered: !expanded };
+  });
   return nodes;
-}
+};

@@ -1,46 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { createTreeNodesArray, changeExpandStatus } from "./Tree.api";
 import "../Tree/components/Tree.css";
 import "../Tree/css/iconfont.css";
 
-const TreeNodes = ({ render, rootNodeIndex, treeNodes, onNodeClick }) => {
-  // console.info("优化Tree---TreeNodes---", {
-  //   render,
-  //   rootNodeIndex,
-  //   treeNodes,
-  //   onNodeClick
-  // });
-  const CreateNodes = React.memo(({ currentParent, currentLevel }) => {
-    const node = treeNodes[currentParent];
-    // console.info("优化Tree---createNodes---", {
-    //   node,
-    //   currentParent,
-    //   currentLevel
-    // });
-    const children = node.children;
-    return (
-      <Node
-        data={node}
-        level={currentLevel}
-        onNodeClick={onNodeClick}
-        render={render}
-        expanded={node.expanded}
-      >
-        {node.expanded && children && children.length && (
-          <ul className="tree-branch-node">
-            {children.map(item => (
-              <CreateNodes
-                key={`node-${treeNodes[item].id}`}
-                currentParent={item}
-                currentLevel={currentLevel + 1}
-              />
-            ))}
-          </ul>
-        )}
-      </Node>
-    );
-  });
-  return <CreateNodes currentParent={rootNodeIndex} currentLevel={0} />;
+const TreeNodes = ({ render, treeNodes, onNodeClick }) => {
+  return class NodesComponent extends React.Component {
+    render() {
+      const { currentLevel, currentParent } = this.props;
+      const node = treeNodes[currentParent];
+      const children = node.children;
+      return (
+        <Node
+          data={node}
+          level={currentLevel}
+          onNodeClick={onNodeClick}
+          render={render}
+          expanded={node.expanded}
+        >
+          {node.expanded && children && children.length && (
+            <ul className="tree-branch-node">
+              {children.map(item => (
+                <NodesComponent
+                  key={`node-${treeNodes[item].id}`}
+                  currentParent={item}
+                  currentLevel={currentLevel + 1}
+                />
+              ))}
+            </ul>
+          )}
+        </Node>
+      );
+    }
+  };
 };
 
 const Node = React.memo(
@@ -97,36 +88,43 @@ export default React.memo(props => {
 
   const [nodesArrObj, setNodesArrObj] = useState({});
   const { rootNodeIndex, treeNodeArr } = nodesArrObj || {};
+  const [NodesComponent, setNodesComponent] = useState(null);
+
+  const nodeClickHandler = useCallback(
+    (e, node) => {
+      e.stopPropagation();
+      onNodeClick(e, node);
+      const newNodesArr = changeExpandStatus(node, treeNodeArr);
+      if (newNodesArr && newNodesArr.length > 0) {
+        setNodesArrObj({ rootNodeIndex, treeNodeArr: newNodesArr });
+      }
+    },
+    [onNodeClick, rootNodeIndex, treeNodeArr]
+  );
 
   useEffect(() => {
     const nodesObject = createTreeNodesArray(treeNodes);
     setNodesArrObj(nodesObject);
-  }, [treeNodes]);
+    setNodesComponent(
+      TreeNodes({
+        render,
+        treeNodes: treeNodeArr,
+        onNodeClick: nodeClickHandler
+      })
+    );
+  }, [treeNodes, render, nodeClickHandler, treeNodeArr]);
 
   if (
     (!rootNodeIndex && rootNodeIndex !== 0) ||
     !treeNodeArr ||
-    !treeNodeArr.length
+    !treeNodeArr.length ||
+    NodesComponent
   )
     return "";
 
-  const nodeClickHandler = (e, node) => {
-    e.stopPropagation();
-    onNodeClick(e, node);
-    const newNodesArr = changeExpandStatus(node, treeNodeArr);
-    if (newNodesArr && newNodesArr.length > 0) {
-      setNodesArrObj({ rootNodeIndex, treeNodeArr: newNodesArr });
-    }
-  };
-
   return (
     <ul className="tree-container">
-      <TreeNodes
-        rootNodeIndex={rootNodeIndex}
-        treeNodes={treeNodeArr}
-        onNodeClick={nodeClickHandler}
-        render={render}
-      />
+      <NodesComponent currentParent={rootNodeIndex} currentLevel={0} />
     </ul>
   );
 });
