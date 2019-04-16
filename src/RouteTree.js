@@ -44,6 +44,13 @@ const ruteConf = [
     name: "React.createContext",
     url: "/react-context",
     path: "modules/ReactContext/ContextTest"
+  },
+  {
+    id: 6,
+    pid: 0,
+    name: "ReactDom.CreatePortal",
+    url: "/react-portal",
+    path: "modules/Portals/Portal"
   }
 ];
 
@@ -60,8 +67,8 @@ const RouteTree = () => {
   const [currentMenuItem, setCurrentMenuItem] = useState({});
   return (
     <BrowserRouter>
-      <div className="main">
-        <div className="menu" id="tree">
+      <div className="main" id="main">
+        <div className="menu">
           <Tree
             render={nodeRender}
             treeNodes={ruteConf}
@@ -70,7 +77,7 @@ const RouteTree = () => {
             }}
           />
         </div>
-        <div className="view">
+        <div className="view" id="view">
           <h3 className="current-menu-item">
             {(currentMenuItem || {}).name || ""}
           </h3>
