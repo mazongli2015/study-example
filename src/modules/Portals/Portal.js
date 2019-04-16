@@ -29,11 +29,7 @@ const styles = {
   boxShadow: "5px 5px 5px 5px gray"
 };
 const Foo = () => {
-  return (
-    <div onClick={() => console.info("触发点击事件")} style={styles}>
-      Portals的使用
-    </div>
-  );
+  return <div style={styles}>Portals的使用</div>;
 };
 
 export default () => (
