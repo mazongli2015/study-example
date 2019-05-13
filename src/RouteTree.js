@@ -51,6 +51,41 @@ const ruteConf = [
     name: "ReactDom.CreatePortal",
     url: "/react-portal",
     path: "modules/Portals/Portal"
+  },
+  {
+    id: 7,
+    pid: 0,
+    name: "深拷贝和浅拷贝",
+    url: "/copy-method",
+    path: "modules/CopyMethods/CopyMethod"
+  },
+  {
+    id: 8,
+    pid: 0,
+    name: "自定义事件",
+    url: "/custom-event",
+    path: "modules/CustomEvent/CustomEvent"
+  },
+  {
+    id: 9,
+    pid: 0,
+    name: "webworker",
+    url: "/web-worker",
+    path: "modules/WebWorkers/WorkerTest"
+  },
+  {
+    id: 10,
+    pid: 0,
+    name: "异步方法比较",
+    url: "/Async-difference",
+    path: "modules/AsyncDifference/AsyncDifference"
+  },
+  {
+    id: 11,
+    pid: 0,
+    name: "排序",
+    url: "/sorts",
+    path: "modules/Sorts/SortTest"
   }
 ];
 
